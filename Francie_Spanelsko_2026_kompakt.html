@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francie & Španělsko 2026 — Itinerář</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f5efe4;
+    --paper-deep: #ece3d2;
+    --ink: #1a1612;
+    --ink-soft: #4a4239;
+    --ink-faint: #8a7d6c;
+    --rule: #1a1612;
+    --c-italie: #c9985a;
+    --c-azur: #5a8fa8;
+    --c-provence: #9c7ba8;
+    --c-barcelona: #c97a5a;
+    --c-paris: #6b7d8f;
+    --c-transit: #8a7d6c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(201, 152, 90, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(90, 143, 168, 0.06) 0%, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.05  0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity: 0.5;
+    z-index: 1;
+  }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 32px 60px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* === KOMPAKTNÍ HLAVIČKA === */
+  header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--rule);
+    margin-bottom: 28px;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-style: italic;
+  }
+
+  h1 .amp {
+    color: var(--c-italie);
+    font-weight: 400;
+  }
+
+  h1 .year {
+    font-style: normal;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+
+  .meta-inline {
+    display: flex;
+    gap: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .meta-inline > div {
+    text-align: right;
+  }
+
+  .meta-inline .label {
+    color: var(--ink-faint);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .meta-inline .value {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  /* === KOMPAKTNÍ TRASA === */
+  .route {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 32px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(26,22,18,0.12);
+    flex-wrap: wrap;
+  }
+
+  .route-stop {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .route-stop .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ink);
+    flex-shrink: 0;
+  }
+
+  .route-stop[data-color="italie"] .dot { background: var(--c-italie); }
+  .route-stop[data-color="azur"] .dot { background: var(--c-azur); }
+  .route-stop[data-color="provence"] .dot { background: var(--c-provence); }
+  .route-stop[data-color="barcelona"] .dot { background: var(--c-barcelona); }
+  .route-stop[data-color="paris"] .dot { background: var(--c-paris); }
+  .route-stop[data-color="transit"] .dot { background: var(--c-transit); }
+
+  .route-stop .nights {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+
+  .route-arrow {
+    color: var(--ink-faint);
+    font-size: 14px;
+  }
+
+  /* === ETAPY - KOMPAKTNÍ === */
+  .etapa {
+    margin-bottom: 24px;
+  }
+
+  .etapa-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 6px 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .etapa-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.2em;
+  }
+
+  .etapa-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    flex: 1;
+  }
+
+  .etapa-dates {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  .etapa-bar {
+    height: 3px;
+    width: 60px;
+    background: var(--c-italie);
+    margin-bottom: 4px;
+  }
+
+  .etapa[data-color="italie"] .etapa-bar { background: var(--c-italie); }
+  .etapa[data-color="azur"] .etapa-bar { background: var(--c-azur); }
+  .etapa[data-color="provence"] .etapa-bar { background: var(--c-provence); }
+  .etapa[data-color="barcelona"] .etapa-bar { background: var(--c-barcelona); }
+  .etapa[data-color="paris"] .etapa-bar { background: var(--c-paris); }
+
+  /* === DENNÍ ŘÁDKY - TABULKA === */
+  .days {
+    display: grid;
+    grid-template-columns: 60px 1fr 1fr 220px;
+    gap: 0;
+  }
+
+  .days-head {
+    display: contents;
+  }
+
+  .days-head > div {
+    padding: 8px 12px 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid rgba(26,22,18,0.2);
+  }
+
+  .day-row {
+    display: contents;
+  }
+
+  .day-row > div {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(26,22,18,0.08);
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .day-row:hover > div {
+    background: rgba(26,22,18,0.025);
+  }
+
+  .day-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  .day-date .num {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .day-date .wd {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+
+  .day-where {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .day-where .transit {
+    display: inline-block;
+    margin-left: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--ink-faint);
+    font-weight: 400;
+    padding: 1px 5px;
+    border: 1px solid rgba(26,22,18,0.2);
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+
+  .day-program {
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .day-stay {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+  }
+
+  .day-stay a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+
+  .day-stay a:hover {
+    color: var(--c-italie);
+    border-bottom-color: var(--c-italie);
+  }
+
+  .day-stay.empty {
+    color: var(--ink-faint);
+  }
+
+  /* === TODO === */
+  .todo {
+    margin-top: 32px;
+    padding: 20px 24px;
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    position: relative;
+  }
+
+  .todo::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 32px;
+    height: 32px;
+    border-top: 2px solid var(--c-barcelona);
+    border-left: 2px solid var(--c-barcelona);
+  }
+
+  .todo h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .todo ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 24px;
+  }
+
+  .todo li {
+    padding-left: 20px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .todo li::before {
+    content: "□";
+    position: absolute;
+    left: 0;
+    top: -1px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--c-barcelona);
+  }
+
+  /* === FOOTER === */
+  footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(26,22,18,0.2);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  footer .ornament {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .print-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    border: 1px solid rgba(26,22,18,0.25);
+    padding: 4px 10px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .print-link:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+    background: rgba(26,22,18,0.04);
+  }
+
+  .print-link::before {
+    content: "⎙";
+    font-size: 12px;
+  }
+
+  /* === RESPONZIVITA === */
+  @media (max-width: 800px) {
+    .wrap { padding: 20px 16px 40px; }
+    header {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .meta-inline {
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .meta-inline > div { text-align: left; }
+    .days {
+      grid-template-columns: 50px 1fr;
+    }
+    .days-head > div:nth-child(3),
+    .days-head > div:nth-child(4),
+    .day-row > div:nth-child(3),
+    .day-row > div:nth-child(4) {
+      grid-column: 2;
+      padding-top: 0;
+      border-bottom: none;
+    }
+    .day-row > div:nth-child(4) {
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(26,22,18,0.08);
+    }
+    .days-head > div:nth-child(3),
+    .days-head > div:nth-child(4) { display: none; }
+    .day-program { font-size: 13px; }
+    .todo ul { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    body::before { display: none; }
+    .day-row:hover > div { background: transparent; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="eyebrow">Itinerář · Léto 2026</div>
+      <h1>Francie <span class="amp">&</span> Španělsko <span class="year">'26</span></h1>
+    </div>
+    <div class="meta-inline">
+      <div>
+        <div class="label">Termín</div>
+        <div class="value">16. 7. – 7. 8.</div>
+      </div>
+      <div>
+        <div class="label">Délka</div>
+        <div class="value">23 dní</div>
+      </div>
+      <div>
+        <div class="label">Zastávek</div>
+        <div class="value">6</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="route">
+    <span class="route-stop" data-color="italie"><span class="dot"></span>Lago di Garda <span class="nights">1n</span></span>
+    <span class="route-arrow">→</span>
+    <span class="route-stop" data-color="azur"><span class="dot"></span>Côte d'Azur <span class="nights">3n</span></span>
+    <span class="route-arrow">→</span>
+    <span class="route-stop" data-color="provence"><span class="dot"></span>Provence <span class="nights">3n</span></span>
+    <span class="route-arrow">→</span>
+    <span class="route-stop" data-color="barcelona"><span class="dot"></span>Barcelona <span class="nights">8n</span></span>
+    <span class="route-arrow">→</span>
+    <span class="route-stop" data-color="transit"><span class="dot"></span>Mezizastávky <span class="nights">2n</span></span>
+    <span class="route-arrow">→</span>
+    <span class="route-stop" data-color="paris"><span class="dot"></span>Paříž <span class="nights">2n</span></span>
+  </div>
+
+  <!-- ETAPA I -->
+  <section class="etapa" data-color="italie">
+    <div class="etapa-bar"></div>
+    <div class="etapa-header">
+      <span class="etapa-number">I</span>
+      <h2 class="etapa-title">Italské jezero</h2>
+      <span class="etapa-dates">16.–17. 7.</span>
+    </div>
+    <div class="days">
+      <div class="days-head">
+        <div>Datum</div><div>Místo</div><div>Program</div><div>Nocleh</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">16</div><div class="wd">čt · čec</div></div>
+        <div class="day-where">Praha → Verona <span class="transit">9 h</span></div>
+        <div class="day-program">Večerní odjezd, noční přesun</div>
+        <div class="day-stay empty">přes noc na cestě</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">17</div><div class="wd">pá · čec</div></div>
+        <div class="day-where">Verona &amp; Lago di Garda</div>
+        <div class="day-program">Prohlídka Verony, odpočinek u jezera</div>
+        <div class="day-stay">Booking + snídaně</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPA II -->
+  <section class="etapa" data-color="azur">
+    <div class="etapa-bar"></div>
+    <div class="etapa-header">
+      <span class="etapa-number">II</span>
+      <h2 class="etapa-title">Côte d'Azur</h2>
+      <span class="etapa-dates">18.–20. 7.</span>
+    </div>
+    <div class="days">
+      <div class="days-head">
+        <div>Datum</div><div>Místo</div><div>Program</div><div>Nocleh</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">18</div><div class="wd">so · čec</div></div>
+        <div class="day-where">Côte d'Azur <span class="transit">7 h</span></div>
+        <div class="day-program">Příjezd, první pláž</div>
+        <div class="day-stay"><a href="https://www.campdudomaine.com/" target="_blank" rel="noopener">Camp du Domaine</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">19</div><div class="wd">ne · čec</div></div>
+        <div class="day-where">Côte d'Azur</div>
+        <div class="day-program">Pláž, odpočinek</div>
+        <div class="day-stay"><a href="https://www.campdudomaine.com/" target="_blank" rel="noopener">Camp du Domaine</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">20</div><div class="wd">po · čec</div></div>
+        <div class="day-where">Côte d'Azur</div>
+        <div class="day-program">Pláž, prozkoumat pobřeží</div>
+        <div class="day-stay"><a href="https://www.campdudomaine.com/" target="_blank" rel="noopener">Camp du Domaine</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPA III -->
+  <section class="etapa" data-color="provence">
+    <div class="etapa-bar"></div>
+    <div class="etapa-header">
+      <span class="etapa-number">III</span>
+      <h2 class="etapa-title">Provence</h2>
+      <span class="etapa-dates">21.–23. 7.</span>
+    </div>
+    <div class="days">
+      <div class="days-head">
+        <div>Datum</div><div>Místo</div><div>Program</div><div>Nocleh</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">21</div><div class="wd">út · čec</div></div>
+        <div class="day-where">Provence</div>
+        <div class="day-program">Pláž, přesun do vnitrozemí</div>
+        <div class="day-stay"><a href="https://www.campdudomaine.com/" target="_blank" rel="noopener">Camp du Domaine</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">22</div><div class="wd">st · čec</div></div>
+        <div class="day-where">Provence</div>
+        <div class="day-program">Abbaye Notre-Dame de Sénanque, levandule</div>
+        <div class="day-stay"><a href="https://www.camping-verbela-village.com/" target="_blank" rel="noopener">Camping Verbéla</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">23</div><div class="wd">čt · čec</div></div>
+        <div class="day-where">Luberon</div>
+        <div class="day-program">Výlet po malebných vesničkách</div>
+        <div class="day-stay"><a href="https://www.camping-verbela-village.com/" target="_blank" rel="noopener">Camping Verbéla</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPA IV -->
+  <section class="etapa" data-color="barcelona">
+    <div class="etapa-bar"></div>
+    <div class="etapa-header">
+      <span class="etapa-number">IV</span>
+      <h2 class="etapa-title">Katalánsko</h2>
+      <span class="etapa-dates">24. 7. – 1. 8.</span>
+    </div>
+    <div class="days">
+      <div class="days-head">
+        <div>Datum</div><div>Místo</div><div>Program</div><div>Nocleh</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">24</div><div class="wd">pá · čec</div></div>
+        <div class="day-where">→ Barcelona <span class="transit">přes Carcassonne</span></div>
+        <div class="day-program">Plameňáci v Camargue, Carcassonne</div>
+        <div class="day-stay empty">na cestě</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">25</div><div class="wd">so · čec</div></div>
+        <div class="day-where">Tamarit</div>
+        <div class="day-program">Pláž, usazení</div>
+        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">26</div><div class="wd">ne · čec</div></div>
+        <div class="day-where">Barcelona</div>
+        <div class="day-program">Fotbal? — ověřit termín</div>
+        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">27</div><div class="wd">po · čec</div></div>
+        <div class="day-where">Barcelona — město</div>
+        <div class="day-program">Sagrada Família, Park Güell, gotická čtvrť</div>
+        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">28</div><div class="wd">út · čec</div></div>
+        <div class="day-where">Tamarit</div>
+        <div class="day-program">Pláž</div>
+        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">29</div><div class="wd">st · čec</div></div>
+        <div class="day-where">Tamarit</div>
+        <div class="day-program">Pláž</div>
+        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">30</div><div class="wd">čt · čec</div></div>
+        <div class="day-where">Tamarit</div>
+        <div class="day-program">Pláž</div>
+        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">31</div><div class="wd">pá · čec</div></div>
+        <div class="day-where">Tamarit</div>
+        <div class="day-program">Pláž</div>
+        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">01</div><div class="wd">so · srp</div></div>
+        <div class="day-where">Tamarit</div>
+        <div class="day-program">Poslední den, balení</div>
+        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETAPA V -->
+  <section class="etapa" data-color="paris">
+    <div class="etapa-bar"></div>
+    <div class="etapa-header">
+      <span class="etapa-number">V</span>
+      <h2 class="etapa-title">Cesta zpátky &amp; Paříž</h2>
+      <span class="etapa-dates">2.–7. 8.</span>
+    </div>
+    <div class="days">
+      <div class="days-head">
+        <div>Datum</div><div>Místo</div><div>Program</div><div>Nocleh</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">02</div><div class="wd">ne · srp</div></div>
+        <div class="day-where">→ San Sebastián <span class="transit">6 h</span></div>
+        <div class="day-program">Baskická kuchyně, pobřeží</div>
+        <div class="day-stay empty">dořešit</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">03</div><div class="wd">po · srp</div></div>
+        <div class="day-where">→ La Rochelle <span class="transit">4,5 h</span></div>
+        <div class="day-program">Atlantické pobřeží</div>
+        <div class="day-stay empty">dořešit</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">04</div><div class="wd">út · srp</div></div>
+        <div class="day-where">→ Paříž <span class="transit">5 h</span></div>
+        <div class="day-program">Příjezd, první večer ve městě</div>
+        <div class="day-stay">Booking + snídaně</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">05</div><div class="wd">st · srp</div></div>
+        <div class="day-where">Paříž</div>
+        <div class="day-program">Památky, kavárny, procházky</div>
+        <div class="day-stay">Booking + snídaně</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">06</div><div class="wd">čt · srp</div></div>
+        <div class="day-where">Paříž → Verdun → Praha <span class="transit">3 h + 8 h</span></div>
+        <div class="day-program">Cesta domů, zastávka u Verdunu</div>
+        <div class="day-stay empty">na cestě</div>
+      </div>
+      <div class="day-row">
+        <div class="day-date"><div class="num">07</div><div class="wd">pá · srp</div></div>
+        <div class="day-where">Praha</div>
+        <div class="day-program">Ranní příjezd, konec cesty</div>
+        <div class="day-stay empty">doma</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TODO -->
+  <section class="todo">
+    <h2>K dořešení</h2>
+    <ul>
+      <li>Rezervace v Lago di Garda / Veroně (17. 7.)</li>
+      <li>Rezervace Camp du Domaine (18.–20. 7.)</li>
+      <li>Fotbal v Barceloně 26. 7. — ověřit + lístky</li>
+      <li>Ubytování San Sebastián a La Rochelle (2.–3. 8.)</li>
+      <li>Tipy na bistra u jednotlivých ubytování</li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>v1.1 · květen 2026</span>
+    <span class="ornament">~ Bon voyage ~</span>
+    <a href="Francie_Spanelsko_2026_tisk.html" target="_blank" class="print-link">Verze pro tisk</a>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francie & Španělsko 2026 — Itinerář (tisk)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 11pt;
+    color: #000;
+    background: #fff;
+    padding: 20mm 18mm;
+    line-height: 1.4;
+  }
+
+  /* === HLAVIČKA === */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid #000;
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: normal;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .header-meta {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    font-size: 8pt;
+    color: #333;
+    line-height: 1.7;
+  }
+
+  /* === TRASA === */
+  .route {
+    font-family: 'Courier New', monospace;
+    font-size: 8.5pt;
+    letter-spacing: 0.05em;
+    color: #444;
+    margin-bottom: 20px;
+    padding: 6px 0;
+    border-bottom: 1px solid #ccc;
+  }
+
+  /* === ETAPY === */
+  .etapa {
+    margin-bottom: 14px;
+    page-break-inside: avoid;
+  }
+
+  .etapa-title {
+    font-size: 12pt;
+    font-style: italic;
+    font-weight: normal;
+    border-bottom: 1px solid #000;
+    padding-bottom: 3px;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .etapa-title span {
+    font-family: 'Courier New', monospace;
+    font-size: 8pt;
+    font-style: normal;
+    color: #555;
+  }
+
+  /* === TABULKA DNÍ === */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+  }
+
+  thead th {
+    font-family: 'Courier New', monospace;
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: normal;
+    color: #666;
+    padding: 4px 8px 4px 0;
+    border-bottom: 1px solid #bbb;
+    text-align: left;
+  }
+
+  tbody td {
+    padding: 5px 8px 5px 0;
+    border-bottom: 1px solid #e8e8e8;
+    vertical-align: top;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .col-date {
+    width: 70px;
+    font-family: 'Courier New', monospace;
+    font-size: 9pt;
+    white-space: nowrap;
+    color: #222;
+  }
+
+  .col-date .num {
+    font-size: 13pt;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .col-date .wd {
+    font-size: 7.5pt;
+    color: #888;
+    margin-top: 1px;
+  }
+
+  .col-where {
+    width: 30%;
+    font-weight: bold;
+    font-size: 9.5pt;
+  }
+
+  .col-where .transit {
+    display: block;
+    font-weight: normal;
+    font-family: 'Courier New', monospace;
+    font-size: 7.5pt;
+    color: #777;
+    margin-top: 1px;
+  }
+
+  .col-program {
+    color: #333;
+  }
+
+  .col-stay {
+    width: 28%;
+    font-style: italic;
+    color: #222;
+  }
+
+  .col-stay.empty { color: #999; font-style: italic; }
+
+  /* === TODO === */
+  .todo {
+    margin-top: 20px;
+    padding: 10px 12px;
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  .todo h2 {
+    font-size: 11pt;
+    font-style: italic;
+    font-weight: normal;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+  }
+
+  .todo ul {
+    list-style: none;
+    columns: 2;
+    gap: 20px;
+  }
+
+  .todo li {
+    padding-left: 14px;
+    position: relative;
+    font-size: 9pt;
+    line-height: 1.5;
+    margin-bottom: 4px;
+    break-inside: avoid;
+  }
+
+  .todo li::before {
+    content: "□";
+    position: absolute;
+    left: 0;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* === FOOTER === */
+  footer {
+    margin-top: 20px;
+    padding-top: 8px;
+    border-top: 1px solid #ccc;
+    font-family: 'Courier New', monospace;
+    font-size: 7.5pt;
+    color: #888;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* === TISK === */
+  @media print {
+    body { padding: 12mm 14mm; }
+    @page { margin: 10mm 14mm; size: A4; }
+    .etapa { page-break-inside: avoid; }
+  }
+
+  /* === SCREEN PREVIEW === */
+  @media screen {
+    body {
+      max-width: 210mm;
+      margin: 20px auto;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      background: #fff;
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: #1a1612;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .print-btn:hover { background: #333; }
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Tisknout</button>
+
+<header>
+  <h1>Francie &amp; Španělsko 2026</h1>
+  <div class="header-meta">
+    16. 7. – 7. 8. 2026<br>
+    23 dní · 6 zastávek<br>
+    Praha → Verona → Azur → Provence → BCN → Paříž → Praha
+  </div>
+</header>
+
+<div class="route">
+  Lago di Garda (1n) → Côte d'Azur (3n) → Provence (3n) → Barcelona / Tamarit (8n) → San Sebastián (1n) → La Rochelle (1n) → Paříž (2n)
+</div>
+
+<!-- I. Italské jezero -->
+<section class="etapa">
+  <div class="etapa-title">I. Italské jezero <span>16.–17. 7.</span></div>
+  <table>
+    <thead><tr><th>Datum</th><th>Místo</th><th>Program</th><th>Nocleh</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="col-date"><div class="num">16</div><div class="wd">čt · čec</div></td>
+        <td class="col-where">Praha → Verona <span class="transit">9 h cesty</span></td>
+        <td class="col-program">Večerní odjezd, noční přesun</td>
+        <td class="col-stay empty">přes noc na cestě</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">17</div><div class="wd">pá · čec</div></td>
+        <td class="col-where">Verona &amp; Lago di Garda</td>
+        <td class="col-program">Prohlídka Verony, odpočinek u jezera</td>
+        <td class="col-stay">Booking + snídaně</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- II. Côte d'Azur -->
+<section class="etapa">
+  <div class="etapa-title">II. Côte d'Azur <span>18.–20. 7.</span></div>
+  <table>
+    <thead><tr><th>Datum</th><th>Místo</th><th>Program</th><th>Nocleh</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="col-date"><div class="num">18</div><div class="wd">so · čec</div></td>
+        <td class="col-where">Côte d'Azur <span class="transit">7 h cesty</span></td>
+        <td class="col-program">Příjezd, první pláž</td>
+        <td class="col-stay">Camp du Domaine</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">19</div><div class="wd">ne · čec</div></td>
+        <td class="col-where">Côte d'Azur</td>
+        <td class="col-program">Pláž, odpočinek</td>
+        <td class="col-stay">Camp du Domaine</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">20</div><div class="wd">po · čec</div></td>
+        <td class="col-where">Côte d'Azur</td>
+        <td class="col-program">Pláž, prozkoumat pobřeží</td>
+        <td class="col-stay">Camp du Domaine</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- III. Provence -->
+<section class="etapa">
+  <div class="etapa-title">III. Provence <span>21.–23. 7.</span></div>
+  <table>
+    <thead><tr><th>Datum</th><th>Místo</th><th>Program</th><th>Nocleh</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="col-date"><div class="num">21</div><div class="wd">út · čec</div></td>
+        <td class="col-where">Provence</td>
+        <td class="col-program">Pláž, přesun do vnitrozemí</td>
+        <td class="col-stay">Camp du Domaine</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">22</div><div class="wd">st · čec</div></td>
+        <td class="col-where">Provence</td>
+        <td class="col-program">Abbaye Notre-Dame de Sénanque, levandule</td>
+        <td class="col-stay">Camping Verbéla</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">23</div><div class="wd">čt · čec</div></td>
+        <td class="col-where">Luberon</td>
+        <td class="col-program">Výlet po malebných vesničkách</td>
+        <td class="col-stay">Camping Verbéla</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- IV. Katalánsko -->
+<section class="etapa">
+  <div class="etapa-title">IV. Katalánsko <span>24. 7. – 1. 8.</span></div>
+  <table>
+    <thead><tr><th>Datum</th><th>Místo</th><th>Program</th><th>Nocleh</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="col-date"><div class="num">24</div><div class="wd">pá · čec</div></td>
+        <td class="col-where">→ Barcelona <span class="transit">přes Carcassonne</span></td>
+        <td class="col-program">Plameňáci v Camargue, Carcassonne</td>
+        <td class="col-stay empty">na cestě</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">25</div><div class="wd">so · čec</div></td>
+        <td class="col-where">Tamarit</td>
+        <td class="col-program">Pláž, usazení</td>
+        <td class="col-stay">Tamarit Beach Resort</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">26</div><div class="wd">ne · čec</div></td>
+        <td class="col-where">Barcelona</td>
+        <td class="col-program">Fotbal? — ověřit termín</td>
+        <td class="col-stay">Tamarit Beach Resort</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">27</div><div class="wd">po · čec</div></td>
+        <td class="col-where">Barcelona — město</td>
+        <td class="col-program">Sagrada Família, Park Güell, gotická čtvrť</td>
+        <td class="col-stay">Tamarit Beach Resort</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">28</div><div class="wd">út · čec</div></td>
+        <td class="col-where">Tamarit</td>
+        <td class="col-program">Pláž</td>
+        <td class="col-stay">Tamarit Beach Resort</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">29</div><div class="wd">st · čec</div></td>
+        <td class="col-where">Tamarit</td>
+        <td class="col-program">Pláž</td>
+        <td class="col-stay">Tamarit Beach Resort</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">30</div><div class="wd">čt · čec</div></td>
+        <td class="col-where">Tamarit</td>
+        <td class="col-program">Pláž</td>
+        <td class="col-stay">Tamarit Beach Resort</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">31</div><div class="wd">pá · čec</div></td>
+        <td class="col-where">Tamarit</td>
+        <td class="col-program">Pláž</td>
+        <td class="col-stay">Tamarit Beach Resort</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">01</div><div class="wd">so · srp</div></td>
+        <td class="col-where">Tamarit</td>
+        <td class="col-program">Poslední den, balení</td>
+        <td class="col-stay">Tamarit Beach Resort</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- V. Cesta zpátky -->
+<section class="etapa">
+  <div class="etapa-title">V. Cesta zpátky &amp; Paříž <span>2.–7. 8.</span></div>
+  <table>
+    <thead><tr><th>Datum</th><th>Místo</th><th>Program</th><th>Nocleh</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="col-date"><div class="num">02</div><div class="wd">ne · srp</div></td>
+        <td class="col-where">→ San Sebastián <span class="transit">6 h</span></td>
+        <td class="col-program">Baskická kuchyně, pobřeží</td>
+        <td class="col-stay empty">dořešit</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">03</div><div class="wd">po · srp</div></td>
+        <td class="col-where">→ La Rochelle <span class="transit">4,5 h</span></td>
+        <td class="col-program">Atlantické pobřeží</td>
+        <td class="col-stay empty">dořešit</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">04</div><div class="wd">út · srp</div></td>
+        <td class="col-where">→ Paříž <span class="transit">5 h</span></td>
+        <td class="col-program">Příjezd, první večer</td>
+        <td class="col-stay">Booking + snídaně</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">05</div><div class="wd">st · srp</div></td>
+        <td class="col-where">Paříž</td>
+        <td class="col-program">Památky, kavárny, procházky</td>
+        <td class="col-stay">Booking + snídaně</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">06</div><div class="wd">čt · srp</div></td>
+        <td class="col-where">→ Verdun → Praha <span class="transit">3 h + 8 h</span></td>
+        <td class="col-program">Cesta domů, zastávka u Verdunu</td>
+        <td class="col-stay empty">na cestě</td>
+      </tr>
+      <tr>
+        <td class="col-date"><div class="num">07</div><div class="wd">pá · srp</div></td>
+        <td class="col-where">Praha</td>
+        <td class="col-program">Ranní příjezd, konec cesty</td>
+        <td class="col-stay empty">doma ✓</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="todo">
+  <h2>K dořešení</h2>
+  <ul>
+    <li>Rezervace ubytování Lago di Garda / Verona (17. 7.)</li>
+    <li>Fotbal v Barceloně 26. 7. — ověřit + lístky</li>
+    <li>Rezervace Camp du Domaine (18.–20. 7.)</li>
+    <li>Ubytování San Sebastián a La Rochelle (2.–3. 8.)</li>
+    <li>Tipy na bistra u jednotlivých ubytování</li>
+  </ul>
+</section>
+
+<footer>
+  <span>Francie &amp; Španělsko 2026 · Itinerář</span>
+  <span>vytištěno: <script>document.write(new Date().toLocaleDateString('cs-CZ'))</script></span>
+</footer>
+
+</body>
+</html>
