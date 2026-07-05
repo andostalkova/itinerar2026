@@ -21,6 +21,8 @@
     --c-barcelona: #c97a5a;
     --c-paris: #6b7d8f;
     --c-transit: #8a7d6c;
+    --ok: #5a8a5a;
+    --warn: #b5603a;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -224,7 +226,7 @@
   /* === DENNÍ ŘÁDKY - TABULKA === */
   .days {
     display: grid;
-    grid-template-columns: 60px 1fr 1fr 220px;
+    grid-template-columns: 60px 1fr 1fr 250px;
     gap: 0;
   }
 
@@ -297,6 +299,14 @@
     vertical-align: middle;
   }
 
+  .workday {
+    margin-left: 6px;
+    font-size: 12px;
+    vertical-align: middle;
+    opacity: 0.85;
+    cursor: help;
+  }
+
   .day-program {
     color: var(--ink-soft);
     font-size: 14px;
@@ -323,9 +333,104 @@
     color: var(--ink-faint);
   }
 
+  /* meta pod názvem ubytování: rezervace, PIN, stav platby */
+  .stay-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    color: var(--ink-faint);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  .stay-meta .pin { color: var(--ink-soft); }
+  .stay-meta .pdf {
+    color: var(--c-azur);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--c-azur);
+  }
+  .stay-meta .pdf:hover { color: var(--c-barcelona); border-bottom-color: var(--c-barcelona); }
+  .pay { font-weight: 500; }
+  .pay.ok { color: var(--ok); }
+  .pay.warn { color: var(--warn); }
+
+  /* === SOUHRNNÁ TABULKA REZERVACÍ === */
+  .rezervace {
+    margin-top: 40px;
+  }
+  .rezervace h2 {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 4px;
+  }
+  .rez-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .rez-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid rgba(26,22,18,0.2);
+  }
+  .rez-table td {
+    padding: 10px;
+    border-bottom: 1px solid rgba(26,22,18,0.08);
+    vertical-align: top;
+  }
+  .rez-table tr:hover td { background: rgba(26,22,18,0.025); }
+  .rez-table .hotel { font-family: 'Fraunces', serif; font-weight: 600; }
+  .rez-table .addr {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-faint);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--ink-faint);
+    display: inline-block;
+    margin-top: 2px;
+  }
+  .rez-table .addr:hover { color: var(--c-azur); border-bottom-color: var(--c-azur); }
+  .rez-table .price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: inline-block;
+    margin-top: 3px;
+  }
+  .rez-table .total td {
+    border-top: 2px solid var(--rule);
+    border-bottom: none;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+  }
+  .rez-table .total .sum {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+  .rez-table .mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .rez-table a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--c-azur);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--c-azur);
+  }
+  .rez-table a:hover { color: var(--c-barcelona); border-bottom-color: var(--c-barcelona); }
+
   /* === TODO === */
   .todo {
-    margin-top: 32px;
+    margin-top: 40px;
     padding: 20px 24px;
     background: var(--paper-deep);
     border: 1px solid var(--rule);
@@ -456,6 +561,8 @@
     .days-head > div:nth-child(4) { display: none; }
     .day-program { font-size: 13px; }
     .todo ul { grid-template-columns: 1fr; }
+    .rez-table { font-size: 12px; }
+    .rez-table th:nth-child(6), .rez-table td:nth-child(6) { display: none; }
   }
 
   @media print {
@@ -475,15 +582,15 @@
     <div class="meta-inline">
       <div>
         <div class="label">Termín</div>
-        <div class="value">16. 7. – 7. 8.</div>
+        <div class="value">16. 7. – 5. 8.</div>
       </div>
       <div>
         <div class="label">Délka</div>
-        <div class="value">23 dní</div>
+        <div class="value">21 dní</div>
       </div>
       <div>
         <div class="label">Zastávek</div>
-        <div class="value">6</div>
+        <div class="value">7</div>
       </div>
     </div>
   </header>
@@ -497,9 +604,9 @@
     <span class="route-arrow">→</span>
     <span class="route-stop" data-color="barcelona"><span class="dot"></span>Barcelona <span class="nights">8n</span></span>
     <span class="route-arrow">→</span>
-    <span class="route-stop" data-color="transit"><span class="dot"></span>Mezizastávky <span class="nights">2n</span></span>
+    <span class="route-stop" data-color="transit"><span class="dot"></span>Poyanne <span class="nights">1n</span></span>
     <span class="route-arrow">→</span>
-    <span class="route-stop" data-color="paris"><span class="dot"></span>Paříž <span class="nights">2n</span></span>
+    <span class="route-stop" data-color="paris"><span class="dot"></span>Paříž <span class="nights">3n</span></span>
   </div>
 
   <!-- ETAPA I -->
@@ -516,15 +623,18 @@
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">16</div><div class="wd">čt · čec</div></div>
-        <div class="day-where">Praha → Verona <span class="transit">9 h</span></div>
+        <div class="day-where">Praha → Verona <span class="transit">odjezd večer</span><span class="workday" title="pracovní den">💻</span></div>
         <div class="day-program">Večerní odjezd, noční přesun</div>
         <div class="day-stay empty">přes noc na cestě</div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">17</div><div class="wd">pá · čec</div></div>
-        <div class="day-where">Verona &amp; Lago di Garda</div>
+        <div class="day-where">Verona &amp; Lago di Garda<span class="workday" title="pracovní den">💻</span></div>
         <div class="day-program">Prohlídka Verony, odpočinek u jezera</div>
-        <div class="day-stay">Booking + snídaně</div>
+        <div class="day-stay">
+          <a href="Lago_di_Garda_17_7_Booking.pdf" target="_blank" rel="noopener">Albergo Al Cacciatore</a>
+          <div class="stay-meta">Rez. 6846035265 · <span class="pin">PIN 5375</span> · <span class="pay warn">nezapl.</span><br>Desenzano · <a class="pdf" href="Lago_di_Garda_17_7_Booking.pdf" target="_blank" rel="noopener">📄 PDF</a></div>
+        </div>
       </div>
     </div>
   </section>
@@ -543,21 +653,24 @@
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">18</div><div class="wd">so · čec</div></div>
-        <div class="day-where">Côte d'Azur <span class="transit">7 h</span></div>
+        <div class="day-where">→ Côte d'Azur <span class="transit">odjezd ráno</span></div>
         <div class="day-program">Příjezd, první pláž</div>
-        <div class="day-stay"><a href="https://www.campdudomaine.com/" target="_blank" rel="noopener">Camp du Domaine</a></div>
+        <div class="day-stay">
+          <a href="Camp_du_Domaine_booking_18504028.pdf" target="_blank" rel="noopener">Camp du Domaine</a>
+          <div class="stay-meta">Rez. 18504028 · <span class="pin">potvrzeno</span> · <span class="pay ok">zapl.</span><br>Bormes-les-Mimosas · <a class="pdf" href="Camp_du_Domaine_booking_18504028.pdf" target="_blank" rel="noopener">📄 PDF</a></div>
+        </div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">19</div><div class="wd">ne · čec</div></div>
         <div class="day-where">Côte d'Azur</div>
         <div class="day-program">Pláž, odpočinek</div>
-        <div class="day-stay"><a href="https://www.campdudomaine.com/" target="_blank" rel="noopener">Camp du Domaine</a></div>
+        <div class="day-stay"><a href="Camp_du_Domaine_booking_18504028.pdf" target="_blank" rel="noopener">Camp du Domaine</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">20</div><div class="wd">po · čec</div></div>
-        <div class="day-where">Côte d'Azur</div>
+        <div class="day-where">Côte d'Azur<span class="workday" title="pracovní den">💻</span></div>
         <div class="day-program">Pláž, prozkoumat pobřeží</div>
-        <div class="day-stay"><a href="https://www.campdudomaine.com/" target="_blank" rel="noopener">Camp du Domaine</a></div>
+        <div class="day-stay"><a href="Camp_du_Domaine_booking_18504028.pdf" target="_blank" rel="noopener">Camp du Domaine</a></div>
       </div>
     </div>
   </section>
@@ -576,21 +689,24 @@
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">21</div><div class="wd">út · čec</div></div>
-        <div class="day-where">Provence</div>
-        <div class="day-program">Pláž, přesun do vnitrozemí</div>
-        <div class="day-stay"><a href="https://www.campdudomaine.com/" target="_blank" rel="noopener">Camp du Domaine</a></div>
+        <div class="day-where">→ Provence <span class="transit">odjezd ráno</span></div>
+        <div class="day-program">Přesun z Azuru, pláž</div>
+        <div class="day-stay">
+          <a href="Verbela_booking_confirmation.pdf" target="_blank" rel="noopener">Camping Verbéla Village</a>
+          <div class="stay-meta">Rez. 18504245 · <span class="pin">potvrzeno</span> · <span class="pay ok">zapl.</span><br>Les Paluds-de-Noves · <a class="pdf" href="Verbela_booking_confirmation.pdf" target="_blank" rel="noopener">📄 PDF</a></div>
+        </div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">22</div><div class="wd">st · čec</div></div>
         <div class="day-where">Provence</div>
         <div class="day-program">Abbaye Notre-Dame de Sénanque, levandule</div>
-        <div class="day-stay"><a href="https://www.camping-verbela-village.com/" target="_blank" rel="noopener">Camping Verbéla</a></div>
+        <div class="day-stay"><a href="Verbela_booking_confirmation.pdf" target="_blank" rel="noopener">Camping Verbéla Village</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">23</div><div class="wd">čt · čec</div></div>
         <div class="day-where">Luberon</div>
         <div class="day-program">Výlet po malebných vesničkách</div>
-        <div class="day-stay"><a href="https://www.camping-verbela-village.com/" target="_blank" rel="noopener">Camping Verbéla</a></div>
+        <div class="day-stay"><a href="Verbela_booking_confirmation.pdf" target="_blank" rel="noopener">Camping Verbéla Village</a></div>
       </div>
     </div>
   </section>
@@ -609,57 +725,57 @@
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">24</div><div class="wd">pá · čec</div></div>
-        <div class="day-where">→ Barcelona <span class="transit">přes Carcassonne</span></div>
-        <div class="day-program">Plameňáci v Camargue, Carcassonne</div>
-        <div class="day-stay empty">na cestě</div>
+        <div class="day-where">→ Barcelona <span class="transit">odjezd ráno</span></div>
+        <div class="day-program">Plameňáci — Camargue, Carcassonne</div>
+        <div class="day-stay">
+          <a href="Spanelsko_Barcelona_24_7_-30_7_Tamarit_120040.pdf" target="_blank" rel="noopener">Tamarit Beach Resort</a>
+          <div class="stay-meta">Rez. 120040 · <span class="pin">potvrzeno</span> · <span class="pay warn">nezapl.</span><br><a class="pdf" href="Spanelsko_Barcelona_24_7_-30_7_Tamarit_120040.pdf" target="_blank" rel="noopener">📄 PDF</a></div>
+        </div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">25</div><div class="wd">so · čec</div></div>
         <div class="day-where">Tamarit</div>
         <div class="day-program">Pláž, usazení</div>
-        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+        <div class="day-stay"><a href="Spanelsko_Barcelona_24_7_-30_7_Tamarit_120040.pdf" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">26</div><div class="wd">ne · čec</div></div>
-        <div class="day-where">Barcelona</div>
-        <div class="day-program">Fotbal? — ověřit termín</div>
-        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+        <div class="day-where">Tamarit</div>
+        <div class="day-program">Pláž</div>
+        <div class="day-stay"><a href="Spanelsko_Barcelona_24_7_-30_7_Tamarit_120040.pdf" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">27</div><div class="wd">po · čec</div></div>
-        <div class="day-where">Barcelona — město</div>
-        <div class="day-program">Sagrada Família, Park Güell, gotická čtvrť</div>
-        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+        <div class="day-where">Tamarit<span class="workday" title="pracovní den">💻</span></div>
+        <div class="day-program">Pláž</div>
+        <div class="day-stay"><a href="Spanelsko_Barcelona_24_7_-30_7_Tamarit_120040.pdf" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">28</div><div class="wd">út · čec</div></div>
-        <div class="day-where">Tamarit</div>
+        <div class="day-where">Tamarit<span class="workday" title="pracovní den">💻</span></div>
         <div class="day-program">Pláž</div>
-        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+        <div class="day-stay"><a href="Spanelsko_Barcelona_24_7_-30_7_Tamarit_120040.pdf" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">29</div><div class="wd">st · čec</div></div>
         <div class="day-where">Tamarit</div>
         <div class="day-program">Pláž</div>
-        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+        <div class="day-stay"><a href="Spanelsko_Barcelona_24_7_-30_7_Tamarit_120040.pdf" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">30</div><div class="wd">čt · čec</div></div>
-        <div class="day-where">Tamarit</div>
-        <div class="day-program">Pláž</div>
-        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+        <div class="day-where">→ Barcelona <span class="transit">odjezd z kempu</span></div>
+        <div class="day-program">Fotbal? — ověřit termín</div>
+        <div class="day-stay">
+          <a href="Spanelsko_Barcelona30_7-1_8_Ibis_Booking.pdf" target="_blank" rel="noopener">Ibis Barcelona Meridiana</a>
+          <div class="stay-meta">Rez. 6342547197 · <span class="pin">PIN 7854</span> · <span class="pay warn">nezapl.</span><br>Nou Barris · <a class="pdf" href="Spanelsko_Barcelona30_7-1_8_Ibis_Booking.pdf" target="_blank" rel="noopener">📄 PDF</a></div>
+        </div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">31</div><div class="wd">pá · čec</div></div>
-        <div class="day-where">Tamarit</div>
-        <div class="day-program">Pláž</div>
-        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
-      </div>
-      <div class="day-row">
-        <div class="day-date"><div class="num">01</div><div class="wd">so · srp</div></div>
-        <div class="day-where">Tamarit</div>
-        <div class="day-program">Poslední den, balení</div>
-        <div class="day-stay"><a href="https://www.tamarit.com/" target="_blank" rel="noopener">Tamarit Beach Resort</a></div>
+        <div class="day-where">Barcelona — město</div>
+        <div class="day-program">Barcelona, volný den</div>
+        <div class="day-stay"><a href="Spanelsko_Barcelona30_7-1_8_Ibis_Booking.pdf" target="_blank" rel="noopener">Ibis Barcelona Meridiana</a></div>
       </div>
     </div>
   </section>
@@ -669,66 +785,153 @@
     <div class="etapa-bar"></div>
     <div class="etapa-header">
       <span class="etapa-number">V</span>
-      <h2 class="etapa-title">Cesta zpátky &amp; Paříž</h2>
-      <span class="etapa-dates">2.–7. 8.</span>
+      <h2 class="etapa-title">Návrat přes Francii</h2>
+      <span class="etapa-dates">1.–5. 8.</span>
     </div>
     <div class="days">
       <div class="days-head">
         <div>Datum</div><div>Místo</div><div>Program</div><div>Nocleh</div>
       </div>
       <div class="day-row">
+        <div class="day-date"><div class="num">01</div><div class="wd">so · srp</div></div>
+        <div class="day-where">→ Poyanne <span class="transit">odjezd ráno</span></div>
+        <div class="day-program">Cesta + výlet na pláž</div>
+        <div class="day-stay">
+          <a href="Francie_Polyanne-1_8_Booking.pdf" target="_blank" rel="noopener">Booking a snídaně, Poyanne</a>
+          <div class="stay-meta">Rez. 6505984925 · <span class="pin">PIN 4249</span> · <span class="pay warn">nezapl.</span><br>40380 Poyanne · <a class="pdf" href="Francie_Polyanne-1_8_Booking.pdf" target="_blank" rel="noopener">📄 PDF</a></div>
+        </div>
+      </div>
+      <div class="day-row">
         <div class="day-date"><div class="num">02</div><div class="wd">ne · srp</div></div>
-        <div class="day-where">→ San Sebastián <span class="transit">6 h</span></div>
-        <div class="day-program">Baskická kuchyně, pobřeží</div>
-        <div class="day-stay empty">dořešit</div>
+        <div class="day-where">→ Meudon <span class="transit">odjezd ráno</span></div>
+        <div class="day-program">Cesta, PSG</div>
+        <div class="day-stay">
+          <a href="Francie_Pariz-2_8-5_8_booking.pdf" target="_blank" rel="noopener">ibis budget Meudon Paris Ouest</a>
+          <div class="stay-meta">Rez. 6220323537 · <span class="pin">PIN 8391</span> · <span class="pay warn">nezapl.</span><br>92190 Meudon · <a class="pdf" href="Francie_Pariz-2_8-5_8_booking.pdf" target="_blank" rel="noopener">📄 PDF</a></div>
+        </div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">03</div><div class="wd">po · srp</div></div>
-        <div class="day-where">→ La Rochelle <span class="transit">4,5 h</span></div>
-        <div class="day-program">Atlantické pobřeží</div>
-        <div class="day-stay empty">dořešit</div>
+        <div class="day-where">Paříž</div>
+        <div class="day-program">PSG, Versailles</div>
+        <div class="day-stay"><a href="Francie_Pariz-2_8-5_8_booking.pdf" target="_blank" rel="noopener">ibis budget Meudon Paris Ouest</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">04</div><div class="wd">út · srp</div></div>
-        <div class="day-where">→ Paříž <span class="transit">5 h</span></div>
-        <div class="day-program">Příjezd, první večer ve městě</div>
-        <div class="day-stay">Booking + snídaně</div>
+        <div class="day-where">Paříž</div>
+        <div class="day-program">Památky, kavárny, procházky</div>
+        <div class="day-stay"><a href="Francie_Pariz-2_8-5_8_booking.pdf" target="_blank" rel="noopener">ibis budget Meudon Paris Ouest</a></div>
       </div>
       <div class="day-row">
         <div class="day-date"><div class="num">05</div><div class="wd">st · srp</div></div>
-        <div class="day-where">Paříž</div>
-        <div class="day-program">Památky, kavárny, procházky</div>
-        <div class="day-stay">Booking + snídaně</div>
-      </div>
-      <div class="day-row">
-        <div class="day-date"><div class="num">06</div><div class="wd">čt · srp</div></div>
-        <div class="day-where">Paříž → Verdun → Praha <span class="transit">3 h + 8 h</span></div>
-        <div class="day-program">Cesta domů, zastávka u Verdunu</div>
-        <div class="day-stay empty">na cestě</div>
-      </div>
-      <div class="day-row">
-        <div class="day-date"><div class="num">07</div><div class="wd">pá · srp</div></div>
-        <div class="day-where">Praha</div>
-        <div class="day-program">Ranní příjezd, konec cesty</div>
-        <div class="day-stay empty">doma</div>
+        <div class="day-where">cesta domů <span class="transit">odjezd ráno</span></div>
+        <div class="day-program">Prohlídka Versailles, cesta domů</div>
+        <div class="day-stay empty">konec cesty</div>
       </div>
     </div>
+  </section>
+
+  <!-- SOUHRNNÁ TABULKA REZERVACÍ -->
+  <section class="rezervace">
+    <h2>Přehled rezervací</h2>
+    <table class="rez-table">
+      <thead>
+        <tr>
+          <th>Termín</th>
+          <th>Nocí</th>
+          <th>Ubytování</th>
+          <th>Č. rezervace</th>
+          <th>PIN / stav</th>
+          <th>Placeno</th>
+          <th>Potvrzení</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="mono">17. 7.</td>
+          <td class="mono">1</td>
+          <td class="hotel">Albergo Al Cacciatore<br><a class="addr" href="https://www.google.com/maps/search/?api=1&amp;query=Albergo%20Al%20Cacciatore%2C%20Viale%20Ettore%20Andreis%202%2C%2025015%20Desenzano%20del%20Garda%2C%20It%C3%A1lie" target="_blank" rel="noopener">Viale Ettore Andreis 2, 25015 Desenzano del Garda ↗</a><br><span class="price">182 €</span></td>
+          <td class="mono">6846035265</td>
+          <td class="mono">5375</td>
+          <td><span class="pay warn">nezapl.</span></td>
+          <td><a href="Lago_di_Garda_17_7_Booking.pdf" target="_blank" rel="noopener">📄 PDF</a></td>
+        </tr>
+        <tr>
+          <td class="mono">18.–20. 7.</td>
+          <td class="mono">3</td>
+          <td class="hotel">Camp du Domaine<br><a class="addr" href="https://www.google.com/maps/search/?api=1&amp;query=Camp%20du%20Domaine%2C%202581%20route%20de%20B%C3%A9nat%2C%2083230%20Bormes-les-Mimosas%2C%20Francie" target="_blank" rel="noopener">2581 route de Bénat, 83230 Bormes-les-Mimosas ↗</a><br><span class="price">341 €</span></td>
+          <td class="mono">18504028</td>
+          <td>potvrzeno</td>
+          <td><span class="pay ok">zapl.</span></td>
+          <td><a href="Camp_du_Domaine_booking_18504028.pdf" target="_blank" rel="noopener">📄 PDF</a></td>
+        </tr>
+        <tr>
+          <td class="mono">21.–23. 7.</td>
+          <td class="mono">3</td>
+          <td class="hotel">Camping Verbéla Village<br><a class="addr" href="https://www.google.com/maps/search/?api=1&amp;query=Camping%20Verb%C3%A9la%20Village%2C%201004%20chemin%20des%20Mules%2C%2013550%20Les%20Paluds%20de%20Noves%2C%20France" target="_blank" rel="noopener">1004 chemin des Mules, 13550 Les Paluds de Noves ↗</a><br><span class="price">140,07 €</span></td>
+          <td class="mono">18504245</td>
+          <td>potvrzeno</td>
+          <td><span class="pay ok">zapl.</span></td>
+          <td><a href="Verbela_booking_confirmation.pdf" target="_blank" rel="noopener">📄 PDF</a></td>
+        </tr>
+        <tr>
+          <td class="mono">24.–30. 7.</td>
+          <td class="mono">6</td>
+          <td class="hotel">Tamarit Beach Resort<br><a class="addr" href="https://www.google.com/maps/search/?api=1&amp;query=Tamarit%20Beach%20Resort%2C%20N-340%2C%20km%201172%2C%2043008%20Tarragona%2C%20%C5%A0pan%C4%9Blsko" target="_blank" rel="noopener">N-340, km 1172, 43008 Tarragona ↗</a><br><span class="price">773 €</span></td>
+          <td class="mono">120040</td>
+          <td>potvrzeno</td>
+          <td><span class="pay warn">nezapl.</span></td>
+          <td><a href="Spanelsko_Barcelona_24_7_-30_7_Tamarit_120040.pdf" target="_blank" rel="noopener">📄 PDF</a></td>
+        </tr>
+        <tr>
+          <td class="mono">30.–31. 7.</td>
+          <td class="mono">2</td>
+          <td class="hotel">Ibis Barcelona Meridiana<br><a class="addr" href="https://www.google.com/maps/search/?api=1&amp;query=Ibis%20Barcelona%20Meridiana%2C%20Passeig%20d%20Andreu%20Nin%209%2C%2008016%20Barcelona%2C%20%C5%A0pan%C4%9Blsko" target="_blank" rel="noopener">Passeig d'Andreu Nin 9, 08016 Barcelona ↗</a><br><span class="price">491 €</span></td>
+          <td class="mono">6342547197</td>
+          <td class="mono">7854</td>
+          <td><span class="pay warn">nezapl.</span></td>
+          <td><a href="Spanelsko_Barcelona30_7-1_8_Ibis_Booking.pdf" target="_blank" rel="noopener">📄 PDF</a></td>
+        </tr>
+        <tr>
+          <td class="mono">1. 8.</td>
+          <td class="mono">1</td>
+          <td class="hotel">Booking a snídaně, Poyanne<br><a class="addr" href="https://www.google.com/maps/search/?api=1&amp;query=152%20rue%20Adour%20et%20Chalosse%2C%2040380%20Poyanne%2C%20Francie" target="_blank" rel="noopener">152 rue Adour et Chalosse, 40380 Poyanne ↗</a><br><span class="price">101,88 €</span></td>
+          <td class="mono">6505984925</td>
+          <td class="mono">4249</td>
+          <td><span class="pay warn">nezapl.</span></td>
+          <td><a href="Francie_Polyanne-1_8_Booking.pdf" target="_blank" rel="noopener">📄 PDF</a></td>
+        </tr>
+        <tr>
+          <td class="mono">2.–5. 8.</td>
+          <td class="mono">3</td>
+          <td class="hotel">ibis budget Meudon Paris Ouest<br><a class="addr" href="https://www.google.com/maps/search/?api=1&amp;query=ibis%20budget%20Meudon%20Paris%20Ouest%2C%203%20bis%20rue%20de%20Paris%2C%2092190%20Meudon%2C%20Francie" target="_blank" rel="noopener">3 bis rue de Paris, 92190 Meudon ↗</a><br><span class="price">454 €</span></td>
+          <td class="mono">6220323537</td>
+          <td class="mono">8391</td>
+          <td><span class="pay warn">nezapl.</span></td>
+          <td><a href="Francie_Pariz-2_8-5_8_booking.pdf" target="_blank" rel="noopener">📄 PDF</a></td>
+        </tr>
+        <tr class="total">
+          <td>Celkem</td>
+          <td class="mono">19</td>
+          <td class="sum">2 482,95 €</td>
+          <td colspan="4"></td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
   <!-- TODO -->
   <section class="todo">
     <h2>K dořešení</h2>
     <ul>
-      <li>Rezervace v Lago di Garda / Veroně (17. 7.)</li>
-      <li>Rezervace Camp du Domaine (18.–20. 7.)</li>
-      <li>Fotbal v Barceloně 26. 7. — ověřit + lístky</li>
-      <li>Ubytování San Sebastián a La Rochelle (2.–3. 8.)</li>
+      <li>Fotbal v Barceloně 30. 7. — ověřit termín a lístky</li>
+      <li>Doplatit zálohy: Lago di Garda, Tamarit, Ibis Barcelona, Poyanne, Paříž (Meudon)</li>
       <li>Tipy na bistra u jednotlivých ubytování</li>
     </ul>
   </section>
 
   <footer>
-    <span>v1.1 · květen 2026</span>
+    <span>v2.0 · červenec 2026</span>
     <span class="ornament">~ Bon voyage ~</span>
     <a href="Francie_Spanelsko_2026_tisk.html" target="_blank" class="print-link">Verze pro tisk</a>
   </footer>
